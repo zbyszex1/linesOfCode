@@ -68,7 +68,7 @@ namespace LinesOfCode
             Top = _top;
             Int32.TryParse(Settings.GetValue("cbIndex", "0").ToString(), out _cbIndex);
             cbType.SelectedIndex = _cbIndex;
-            txtDirSource.Text = Settings.GetValue("Path", "C:\\").ToString();
+            txtDirSource.Text = Settings.GetValue("Path", Environment.CurrentDirectory).ToString();
             ShowList(txtDirSource.Text);
         }
 
@@ -151,11 +151,17 @@ namespace LinesOfCode
                 if (lp < 0)
                     continue;
                 String shortdir = subdir.Substring(++lp);
-                if( prefdir.Length != 0 )
-                    shortdir = prefdir + "\\" + shortdir;
-                if (shortdir == ".git")
+                if (shortdir == ".git" || 
+                    shortdir == ".vs" ||
+                    shortdir == ".vscode" ||
+                    shortdir == "node_modules" ||
+                    shortdir == "obj" ||
+                    shortdir == "bin" ||
+                    shortdir == "build")
                     continue;
-                FillList(subdir, shortdir);
+                if (prefdir.Length != 0)
+                    shortdir = prefdir + "\\" + shortdir;
+        FillList(subdir, shortdir);
             }
             cbAll.Checked = lvSources.Items.Count > 0;
             this.Cursor = current;
@@ -254,9 +260,9 @@ namespace LinesOfCode
             CalcClass.DoCalc(files, progressBar, out _lines, out _volume);
             CultureInfo ci = new CultureInfo("pl-PL");
             ci.NumberFormat.NumberDecimalDigits = 0;
-            _volume /= 1024*1024;
+            _volume /= 1024;
             txtCount.Text = files.Count.ToString();
-            txtVolume.Text = _volume.ToString() + " MB";
+            txtVolume.Text = _volume.ToString() + " kB";
             txtLinesOfCode.Text = _lines.ToString("N", ci);
             Cursor = oldCursor;
         }

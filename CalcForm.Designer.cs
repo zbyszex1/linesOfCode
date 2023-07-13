@@ -150,7 +150,7 @@
             "*.cs",
             "*.sql",
             "*.php",
-            "*.js;*.ts",
+            "*.js;*.ts;*.jsx",
             "*.xml;*.xsd;*.xslt",
             "*.html;*.htm;*.php;*.css"});
             this.cbType.Location = new System.Drawing.Point(140, 12);
